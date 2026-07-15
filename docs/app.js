@@ -21,7 +21,7 @@ function renderMetrics(){
   const vals={
     meetings:p.meeting_count, agenda:p.agenda_item_count, documents:p.document_count,
     features:p.feature_count, funding:p.funding_event_count, media:p.media_count,
-    questions:p.verified_question_count, timestamps:D.meta.verified_timestamps
+    questions:p.verified_question_count, timestamps:D.meta.verified_timestamps, timeline:D.timeline.length
   };
   Object.entries(vals).forEach(([k,v])=>document.querySelectorAll(`[data-metric="${k}"]`).forEach(el=>el.textContent=v));
 }
