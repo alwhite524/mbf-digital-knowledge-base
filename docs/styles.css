@@ -7,3 +7,21 @@
 @media(max-width:1100px){.story-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:900px){.status-layout{grid-template-columns:1fr}.story-grid{grid-template-columns:1fr 1fr}.funding-summary,.evidence-guide{grid-template-columns:1fr}}
 @media(max-width:650px){.story-grid{grid-template-columns:1fr}.status-main,.snapshot-card{padding:20px}.status-actions .btn{width:100%;text-align:center}}
+
+
+/* In-browser media viewer */
+body.modal-open{overflow:hidden}
+.media-card a{display:inline-flex;align-items:center;gap:.35rem}
+.media-viewer[hidden]{display:none}
+.media-viewer{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:1rem}
+.media-viewer-backdrop{position:absolute;inset:0;background:rgba(3,18,38,.82);backdrop-filter:blur(4px)}
+.media-viewer-panel{position:relative;width:min(1100px,96vw);max-height:94vh;background:#fff;border-radius:16px;box-shadow:0 28px 80px rgba(0,0,0,.45);overflow:hidden;display:flex;flex-direction:column}
+.media-viewer-header,.media-viewer-footer{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 1rem;background:#fff}
+.media-viewer-header{border-bottom:1px solid #d9e1ea}.media-viewer-footer{border-top:1px solid #d9e1ea}
+.media-viewer-header h2{font-size:1.05rem;margin:0;color:#0b3567}
+.viewer-close{border:0;background:#0b3567;color:#fff;border-radius:999px;width:2.4rem;height:2.4rem;font-size:1.7rem;line-height:1;cursor:pointer}
+.media-viewer-body{min-height:280px;display:grid;place-items:center;background:#07182c;overflow:auto}
+.viewer-image{display:block;max-width:100%;max-height:78vh;object-fit:contain}
+.viewer-video{display:block;width:100%;max-height:78vh;background:#000}
+.viewer-frame{display:block;width:100%;height:min(76vh,760px);border:0;background:#fff}
+@media (max-width:640px){.media-viewer{padding:.35rem}.media-viewer-panel{width:100%;max-height:98vh;border-radius:10px}.viewer-frame{height:72vh}.media-viewer-header h2{font-size:.95rem}}
