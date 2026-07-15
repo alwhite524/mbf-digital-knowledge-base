@@ -23,7 +23,7 @@ function renderMetrics(){
     features:p.feature_count, funding:p.funding_event_count, media:p.media_count,
     questions:p.verified_question_count, timestamps:D.meta.verified_timestamps
   };
-  Object.entries(vals).forEach(([k,v])=>{const el=document.querySelector(`[data-metric="${k}"]`);if(el)el.textContent=v});
+  Object.entries(vals).forEach(([k,v])=>document.querySelectorAll(`[data-metric="${k}"]`).forEach(el=>el.textContent=v));
 }
 
 function renderTimeline(){
@@ -108,3 +108,23 @@ function renderSources(){
 renderMetrics();renderTimeline();renderFeatures();renderMeetings();renderQuestions();renderFunding();renderSources();
 $('#meeting-search').addEventListener('input',renderMeetings);$('#meeting-filter').addEventListener('change',renderMeetings);
 $('#question-search').addEventListener('input',renderQuestions);$('#source-search').addEventListener('input',renderSources);
+
+function combinedSearch(query){
+  const q=(query||'').trim().toLowerCase();
+  const out=[];
+  if(!q){$('#combined-results').innerHTML='<div class="empty">Enter a search term to explore the current evidence.</div>';return;}
+  D.questions.filter(r=>[r.question,r.short_answer,r.detailed_answer,r.category].join(' ').toLowerCase().includes(q)).slice(0,6).forEach(r=>out.push({type:'Verified question',title:r.question,body:r.short_answer||r.detailed_answer,href:'#questions',status:r.verification_status}));
+  D.meetings.filter(r=>[r.meeting_date,r.item_number,r.title,r.category,r.recommendation,r.notes].join(' ').toLowerCase().includes(q)).slice(0,6).forEach(r=>out.push({type:'Council record',title:r.title,body:`${r.meeting_date} · Item ${r.item_number} · ${r.recommendation||r.notes||''}`,href:r.official_url,status:r.verification_status,external:true}));
+  D.documents.filter(r=>[r.title,r.document_type,r.summary,r.publisher,r.archive_code].join(' ').toLowerCase().includes(q)).slice(0,6).forEach(r=>out.push({type:'Evidence source',title:r.title,body:r.summary||`${r.document_type||'Source'} · ${r.document_date||'Undated'}`,href:r.official_url,status:r.verification_status,external:true}));
+  D.features.filter(r=>[r.name,r.description,r.phase_name].join(' ').toLowerCase().includes(q)).slice(0,4).forEach(r=>out.push({type:'Project feature',title:r.name,body:`${r.phase_name}: ${r.description||''}`,href:'#features',status:r.verification_status}));
+  D.funding.filter(r=>[r.event_type,r.event_date,r.phase_name,r.purpose,r.amount_status].join(' ').toLowerCase().includes(q)).slice(0,4).forEach(r=>out.push({type:'Funding event',title:r.event_type,body:`${r.event_date||''} · ${r.purpose||r.amount_status||''}`,href:'#funding',status:r.verification_status}));
+  $('#combined-results').innerHTML=out.length?out.slice(0,18).map(r=>`<article class="result-card"><div class="result-type">${esc(r.type)}</div><h3>${esc(r.title)}</h3>${badge(r.status||'research',statusClass(r.status))}<p>${esc(r.body||'')}</p><a href="${esc(r.href||'#')}" ${r.external?'target="_blank" rel="noopener"':''}><strong>${r.external?'Open source':'View section'} →</strong></a></article>`).join(''):'<div class="empty">No current Stewart Park records matched that search. This may identify a future evidence gap.</div>';
+}
+
+const menuButton=$('#menu-button');
+menuButton.addEventListener('click',()=>{const nav=$('#primary-nav');const open=nav.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open));});
+$$('#primary-nav a').forEach(a=>a.addEventListener('click',()=>{$('#primary-nav').classList.remove('open');menuButton.setAttribute('aria-expanded','false')}));
+$('#combined-search').addEventListener('input',e=>combinedSearch(e.target.value));
+$('#clear-search').addEventListener('click',()=>{$('#combined-search').value='';combinedSearch('');$('#combined-search').focus()});
+$('#global-search-form').addEventListener('submit',e=>{e.preventDefault();const q=$('#global-search').value;$('#combined-search').value=q;combinedSearch(q);location.hash='search';});
+$$('[data-query]').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.query;$('#global-search').value=q;$('#combined-search').value=q;combinedSearch(q);location.hash='search'}));
