@@ -81,15 +81,24 @@ function renderQuestions(){
 }
 
 function renderFunding(){
-  $('#funding-list').innerHTML=D.funding.map(r=>`
-    <article class="card">
+  const evidenceByEvent={
+    'SP-FUND-PHASE1-FULLY-FUNDED':'https://www.beaumontca.gov/1163/Stewart-Park-Renovation',
+    'SP-FUND-2026-0602-ORLP':'https://www.beaumontca.gov/1163/Stewart-Park-Renovation'
+  };
+  $('#funding-list').innerHTML=D.funding.map(r=>{
+    const url=evidenceByEvent[r.archive_code];
+    const inner=`
       <div class="meta">${esc(r.event_date||'')} · ${esc(r.phase_name||'')}</div>
       <h3>${esc(r.event_type)}</h3>
       ${r.amount!=null?`<p><strong>${money(r.amount)}</strong></p>`:''}
       <p>${esc(r.amount_status||'')}</p>
       <p>${esc(r.purpose||'')}</p>
       ${badge(r.verification_status,statusClass(r.verification_status))}
-    </article>`).join('');
+      ${url?'<p><strong>View evidence →</strong></p>':''}`;
+    return url
+      ? `<a class="card funding-link" href="${esc(url)}" target="_blank" rel="noopener">${inner}</a>`
+      : `<article class="card">${inner}</article>`;
+  }).join('');
 }
 
 function renderSources(){
