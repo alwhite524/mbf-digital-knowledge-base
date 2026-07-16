@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.0 — Sprint 2.4 Revised
+- Restored the Beaumont mountain landing-page experience.
+- Added the Beaumont Project Library application shell.
+- Moved Stewart Park into a dedicated project route.
+- Added future-project cards.
+- Added GitHub issue templates and Project Board setup documentation.
+
 ## 0.7.0 — Sprint 2.3 Public Web Application
 - Added a mobile-first Stewart Park Intelligence Center.
 - Added project metrics, timeline, features, funding, Council records, verified questions, and source library.

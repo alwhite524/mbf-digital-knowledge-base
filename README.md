@@ -1,6 +1,6 @@
 # MBF Digital Knowledge Base
 
-Version **0.7.0** — Sprint 2.1 Data Engine
+Version **0.8.0** — Sprint 2.1 Data Engine
 
 The Move Beaumont Forward Digital Knowledge Base is a source-first, searchable project intelligence platform. Stewart Park is the first seeded project.
 
@@ -38,3 +38,9 @@ Open `website/index.html` or run:
 ```bash
 python scripts/serve_web.py
 ```
+
+## Application routes
+- `website/index.html` — Beaumont Project Library landing page
+- `website/stewart-park/index.html` — Stewart Park Intelligence Center
+
+See `docs/github-project-board.md`.
